@@ -21,6 +21,7 @@ const alchemy = new Alchemy(settings);
 
 function App() {
   const [blockNumber, setBlockNumber] = useState();
+  const [blockInfo, setBlockInfo] = useState();
 
   useEffect(() => {
     async function getBlockNumber() {
@@ -30,7 +31,17 @@ function App() {
     getBlockNumber();
   });
 
-  return <div className="App">Block Number: {blockNumber}</div>;
+  useEffect(() => {
+    async function getBlock(blockNumber){
+      setBlockInfo(await alchemy.core.getBlock(blockNumber))
+    }
+    getBlock(blockNumber);
+  })
+  return (
+  <>
+    <div className="App">{console.log({blockInfo})}</div>;
+  </>
+  )
 }
 
 export default App;

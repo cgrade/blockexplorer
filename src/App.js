@@ -1,7 +1,10 @@
 import { Alchemy, Network } from 'alchemy-sdk';
-import { useEffect, useState } from 'react';
 
 import './App.css';
+import Header from './components/Header';
+import NavBar from './components/NavBar';
+import LiveStats from './components/LiveStats';
+import { useState } from 'react';
 
 // Refer to the README doc for more information about using API
 // keys in client-side code. You should never do this in production
@@ -20,26 +23,25 @@ const settings = {
 const alchemy = new Alchemy(settings);
 
 function App() {
-  const [blockNumber, setBlockNumber] = useState();
-  const [blockInfo, setBlockInfo] = useState();
 
-  useEffect(() => {
-    async function getBlockNumber() {
-      setBlockNumber(await alchemy.core.getBlockNumber());
-    }
+//LiveStats
+  const [gas, setGas] = useState();
+  const [block, setBlock] = useState();
 
-    getBlockNumber();
-  });
+  async function props(){
+    setBlock(await alchemy.core.getBlockNumber().valueOf());
+    setGas((await alchemy.core.getGasPrice()).toString());
+  }
+  props();
 
-  useEffect(() => {
-    async function getBlock(blockNumber){
-      setBlockInfo(await alchemy.core.getBlock(blockNumber))
-    }
-    getBlock(blockNumber);
-  })
   return (
   <>
-    <div className="App">{console.log({blockInfo})}</div>;
+    <Header />
+    <NavBar />
+    <LiveStats gas={gas} block={block} mcap="$125Billion"/>
+    <div className="latest">
+      
+    </div>
   </>
   )
 }
